@@ -27,6 +27,10 @@ public class GenderController {
             String nameGender = "";
             if (guessVariant.equals("single")) {
                 nameGender = genderService.checkSingleName(name);
+            } else if (guessVariant.equals("multiple")) {
+                nameGender = genderService.checkMultipleName(name);
+            } else {
+                return new ResponseEntity<>("guess variant no exist", HttpStatus.BAD_REQUEST);
             }
 
             return new ResponseEntity<>(nameGender, HttpStatus.OK);
