@@ -24,7 +24,7 @@ public class GenderController {
     public ResponseEntity<String> guessGender(@RequestParam String name, @RequestParam String guessVariant) {
 
         try {
-            String nameGender = "";
+            String nameGender;
             if (guessVariant.equals("single")) {
                 nameGender = genderService.checkSingleName(name);
             } else if (guessVariant.equals("multiple")) {
