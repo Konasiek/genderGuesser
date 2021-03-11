@@ -30,9 +30,8 @@ public class GenderController {
             } else if (guessVariant.equals("multiple")) {
                 nameGender = genderService.checkMultipleName(name);
             } else {
-                return new ResponseEntity<>("guess variant no exist", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("guess variant does not exist", HttpStatus.BAD_REQUEST);
             }
-
             return new ResponseEntity<>(nameGender, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
