@@ -29,11 +29,11 @@ public class FlatFileServiceImpl implements FlatFileService {
         maleReader.open(new ExecutionContext());
 
         List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < 10743; i++) {
+        for (int i = 0; i < 23349; i++) {
             try {
                 persons.add(maleReader.read());
                 if (persons.get(i).getName().equals(nameToCheck.toUpperCase())) {
-                    System.out.println("db contains: " + nameToCheck);
+                    System.out.println("male db contains: " + nameToCheck);
                     maleReader.close();
                     return true;
                 }
@@ -42,6 +42,31 @@ public class FlatFileServiceImpl implements FlatFileService {
             }
         }
         maleReader.close();
+        return false;
+    }
+
+    @Override
+    public boolean isFemaleNameExist(String nameToCheck) {
+
+        FlatFileItemReader<Person> femaleReader = flatFileConnector.createFemaleFlatFileConnection();
+
+        femaleReader.open(new ExecutionContext());
+
+        List<Person> persons = new ArrayList<>();
+        for (int i = 0; i < 17381; i++) {
+            try {
+                persons.add(femaleReader.read());
+                if (persons.get(i).getName().equals(nameToCheck.toUpperCase())) {
+                    System.out.println("female db contains: " + nameToCheck);
+                    femaleReader.close();
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        femaleReader.close();
+
         return false;
     }
 }

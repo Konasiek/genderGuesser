@@ -40,18 +40,16 @@ public class GenderServiceImpl implements GenderService {
         int maleCounter = 0;
         int femaleCounter = 0;
 
-        try {
-            for (String nameToCheck : givenNameList) {
-                if (flatFileService.isMaleNameExist(nameToCheck)) {
-                    maleCounter++;
-                }
+        for (String nameToCheck : givenNameList) {
+            if (flatFileService.isMaleNameExist(nameToCheck)) {
+                maleCounter++;
+            } else if (flatFileService.isFemaleNameExist(nameToCheck)) {
+                femaleCounter++;
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         System.out.println("maleCounter: " + maleCounter);
+        System.out.println("femaleCounter: " + femaleCounter);
 
         if (maleCounter > femaleCounter) {
             return "MALE";
