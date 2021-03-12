@@ -22,9 +22,9 @@ public class GenderServiceImpl implements GenderService {
     @Override
     public String checkSingleName(String givenName) {
 
-        String nameToCheck = givenName.substring(0, givenName.indexOf(","));
+        String nameToCheck = givenName.substring(0, givenName.indexOf(" "));
 
-        if (flatFileService.isMaleNameExist(nameToCheck)) {
+        if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isMaleNameExist(nameToCheck)) {
             return "MALE";
         } else if (flatFileService.isFemaleNameExist(nameToCheck)) {
             return "FEMALE";
@@ -36,12 +36,12 @@ public class GenderServiceImpl implements GenderService {
     @Override
     public String checkMultipleName(String givenName) {
 
-        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenName.split(",")));
+        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenName.split(" ")));
         int maleCounter = 0;
         int femaleCounter = 0;
 
         for (String nameToCheck : givenNameList) {
-            if (flatFileService.isMaleNameExist(nameToCheck)) {
+            if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isMaleNameExist(nameToCheck)) {
                 maleCounter++;
             } else if (flatFileService.isFemaleNameExist(nameToCheck)) {
                 femaleCounter++;
