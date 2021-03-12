@@ -20,13 +20,13 @@ public class GenderServiceImpl implements GenderService {
     }
 
     @Override
-    public String checkSingleName(String givenName) {
+    public String checkSingleName(String givenString) {
 
-        String nameToCheck = givenName.substring(0, givenName.indexOf(" "));
+        String nameToCheck = givenString.substring(0, givenString.indexOf(" "));
 
         if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isMaleNameExist(nameToCheck)) {
             return "MALE";
-        } else if (flatFileService.isFemaleNameExist(nameToCheck)) {
+        } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isFemaleNameExist(nameToCheck)) {
             return "FEMALE";
         } else {
             return "INCONCLUSIVE";
@@ -34,16 +34,16 @@ public class GenderServiceImpl implements GenderService {
     }
 
     @Override
-    public String checkMultipleName(String givenName) {
+    public String checkMultipleName(String givenString) {
 
-        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenName.split(" ")));
+        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenString.split(" ")));
         int maleCounter = 0;
         int femaleCounter = 0;
 
         for (String nameToCheck : givenNameList) {
             if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isMaleNameExist(nameToCheck)) {
                 maleCounter++;
-            } else if (flatFileService.isFemaleNameExist(nameToCheck)) {
+            } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isFemaleNameExist(nameToCheck)) {
                 femaleCounter++;
             }
         }
@@ -61,11 +61,11 @@ public class GenderServiceImpl implements GenderService {
 
     @Override
     public List<String> getMaleTokens() {
-        return flatFileService.getMaleTokens();
+        return flatFileService.getGenderTokens("male");
     }
 
     @Override
     public List<String> getFemaleTokens() {
-        return flatFileService.getFemaleTokens();
+        return flatFileService.getGenderTokens("female");
     }
 }

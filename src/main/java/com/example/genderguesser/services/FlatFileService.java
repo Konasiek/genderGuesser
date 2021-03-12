@@ -8,8 +8,6 @@ public interface FlatFileService {
 
     boolean isFemaleNameExist(String nameToCheck);
 
-    List<String> getMaleTokens();
-
-    List<String> getFemaleTokens();
+    List<String> getGenderTokens(String gender);
 }
 

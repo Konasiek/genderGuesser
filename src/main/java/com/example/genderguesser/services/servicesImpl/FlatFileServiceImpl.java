@@ -15,6 +15,8 @@ import java.util.List;
 public class FlatFileServiceImpl implements FlatFileService {
 
     private FlatFileConnector flatFileConnector;
+    private static final int maleCSTLength = 23349;
+    private static final int femaleCSVLength = 17381;
 
     @Autowired
     public FlatFileServiceImpl(FlatFileConnector flatFileConnector) {
@@ -29,7 +31,7 @@ public class FlatFileServiceImpl implements FlatFileService {
         maleReader.open(new ExecutionContext());
 
         List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < 23349; i++) {
+        for (int i = 0; i < maleCSTLength; i++) {
             try {
                 persons.add(maleReader.read());
                 if (persons.get(i).getName().equals(nameToCheck.toUpperCase())) {
@@ -53,7 +55,7 @@ public class FlatFileServiceImpl implements FlatFileService {
         femaleReader.open(new ExecutionContext());
 
         List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < 17381; i++) {
+        for (int i = 0; i < femaleCSVLength; i++) {
             try {
                 persons.add(femaleReader.read());
                 if (persons.get(i).getName().equals(nameToCheck.toUpperCase())) {
@@ -71,52 +73,36 @@ public class FlatFileServiceImpl implements FlatFileService {
     }
 
     @Override
-    public List<String> getMaleTokens() {
+    public List<String> getGenderTokens(String gender) {
 
-        FlatFileItemReader<Person> maleReader = flatFileConnector.createMaleFlatFileConnection();
-
-        maleReader.open(new ExecutionContext());
+        FlatFileItemReader<Person> fileReader;
+        int fileCSVLength;
+        if (gender.equals("male")) {
+            fileReader = flatFileConnector.createMaleFlatFileConnection();
+            fileCSVLength = maleCSTLength;
+        } else if (gender.equals("female")) {
+            fileReader = flatFileConnector.createFemaleFlatFileConnection();
+            fileCSVLength = femaleCSVLength;
+        } else {
+            throw new RuntimeException("No such gender exist");
+        }
+        fileReader.open(new ExecutionContext());
 
         List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < 23349; i++) {
+        for (int i = 0; i < fileCSVLength; i++) {
             try {
-                persons.add(maleReader.read());
+                persons.add(fileReader.read());
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        maleReader.close();
+        fileReader.close();
 
-        List<String> maleTokens = new ArrayList<>();
+        List<String> tokens = new ArrayList<>();
         for (Person person : persons) {
-            maleTokens.add(person.getName());
+            tokens.add(person.getName());
         }
-        return maleTokens;
-    }
-
-    @Override
-    public List<String> getFemaleTokens() {
-
-        FlatFileItemReader<Person> femaleReader = flatFileConnector.createFemaleFlatFileConnection();
-
-        femaleReader.open(new ExecutionContext());
-
-        List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < 17381; i++) {
-            try {
-                persons.add(femaleReader.read());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        femaleReader.close();
-
-        List<String> femaleTokens = new ArrayList<>();
-        for (Person person : persons) {
-            femaleTokens.add(person.getName());
-        }
-        return femaleTokens;
+        return tokens;
     }
 }
