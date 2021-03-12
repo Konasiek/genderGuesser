@@ -69,4 +69,54 @@ public class FlatFileServiceImpl implements FlatFileService {
 
         return false;
     }
+
+    @Override
+    public List<String> getMaleTokens() {
+
+        FlatFileItemReader<Person> maleReader = flatFileConnector.createMaleFlatFileConnection();
+
+        maleReader.open(new ExecutionContext());
+
+        List<Person> persons = new ArrayList<>();
+        for (int i = 0; i < 23349; i++) {
+            try {
+                persons.add(maleReader.read());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        maleReader.close();
+
+        List<String> maleTokens = new ArrayList<>();
+        for (Person person : persons) {
+            maleTokens.add(person.getName());
+        }
+        return maleTokens;
+    }
+
+    @Override
+    public List<String> getFemaleTokens() {
+
+        FlatFileItemReader<Person> femaleReader = flatFileConnector.createFemaleFlatFileConnection();
+
+        femaleReader.open(new ExecutionContext());
+
+        List<Person> persons = new ArrayList<>();
+        for (int i = 0; i < 17381; i++) {
+            try {
+                persons.add(femaleReader.read());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        femaleReader.close();
+
+        List<String> femaleTokens = new ArrayList<>();
+        for (Person person : persons) {
+            femaleTokens.add(person.getName());
+        }
+        return femaleTokens;
+    }
 }

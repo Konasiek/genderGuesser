@@ -47,7 +47,6 @@ public class GenderServiceImpl implements GenderService {
                 femaleCounter++;
             }
         }
-
         System.out.println("maleCounter: " + maleCounter);
         System.out.println("femaleCounter: " + femaleCounter);
 
@@ -58,5 +57,15 @@ public class GenderServiceImpl implements GenderService {
         } else {
             return "INCONCLUSIVE";
         }
+    }
+
+    @Override
+    public List<String> getMaleTokens() {
+        return flatFileService.getMaleTokens();
+    }
+
+    @Override
+    public List<String> getFemaleTokens() {
+        return flatFileService.getFemaleTokens();
     }
 }
