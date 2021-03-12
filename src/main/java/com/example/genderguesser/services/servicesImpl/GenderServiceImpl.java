@@ -22,12 +22,12 @@ public class GenderServiceImpl implements GenderService {
     @Override
     public String checkSingleName(String givenName) {
 
-        //do string to check with only first word (.split)
+        String nameToCheck = givenName.substring(0, givenName.indexOf(","));
 
-        if (givenName.equals("Anna") || givenName.equals("Maria")) {
-            return "FEMALE";
-        } else if (givenName.equals("Adam") || givenName.equals("Marcin")) {
+        if (flatFileService.isMaleNameExist(nameToCheck)) {
             return "MALE";
+        } else if (flatFileService.isFemaleNameExist(nameToCheck)) {
+            return "FEMALE";
         } else {
             return "INCONCLUSIVE";
         }
@@ -36,7 +36,7 @@ public class GenderServiceImpl implements GenderService {
     @Override
     public String checkMultipleName(String givenName) {
 
-        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenName.split(" ")));
+        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenName.split(",")));
         int maleCounter = 0;
         int femaleCounter = 0;
 
