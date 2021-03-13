@@ -60,12 +60,7 @@ public class GenderServiceImpl implements GenderService {
     }
 
     @Override
-    public List<String> getMaleTokens() {
-        return flatFileService.getGenderTokens("male");
-    }
-
-    @Override
-    public List<String> getFemaleTokens() {
-        return flatFileService.getGenderTokens("female");
+    public List<String> getTokens(String gender) {
+        return flatFileService.getGenderTokens(gender);
     }
 }

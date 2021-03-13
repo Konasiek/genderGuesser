@@ -41,21 +41,16 @@ public class GenderController {
     }
 
     @GetMapping("/get-tokens")
-    public ResponseEntity getTokens (@RequestParam String gender) {
+    public ResponseEntity getTokens(@RequestParam String gender) {
 
         try {
-            if (gender.equals("male")) {
-                List<String> maleTokens = genderService.getMaleTokens();
-                return new ResponseEntity<>(maleTokens, HttpStatus.OK);
-            } else if (gender.equals("female")) {
-                List<String> femaleTokens = genderService.getFemaleTokens();
-                return new ResponseEntity<>(femaleTokens, HttpStatus.OK);
+            if (gender.equals("male") || gender.equals("female")) {
+                return new ResponseEntity<>(genderService.getTokens(gender), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("gender must be male or female", HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 }

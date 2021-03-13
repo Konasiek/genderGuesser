@@ -8,7 +8,5 @@ public interface GenderService {
 
     String checkMultipleName(String name);
 
-    List<String> getMaleTokens();
-
-    List<String> getFemaleTokens();
+    List<String> getTokens(String gender);
 }
