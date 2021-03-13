@@ -10,14 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class FlatFileServiceImpl implements FlatFileService {
 
     private FlatFileConnector flatFileConnector;
-    private static final int maleCSTLength = 23349;
-    private static final int femaleCSVLength = 17381;
 
     @Autowired
     public FlatFileServiceImpl(FlatFileConnector flatFileConnector) {
@@ -26,21 +23,13 @@ public class FlatFileServiceImpl implements FlatFileService {
 
     @Override
     public boolean isNameExist(String nameToCheck, String gender) {
-        FlatFileItemReader<Person> fileReader;
-        int fileCSVLength;
-        if (gender.equals("male")) {
-            fileReader = flatFileConnector.createMaleFlatFileConnection();
-            fileCSVLength = maleCSTLength;
-        } else if (gender.equals("female")) {
-            fileReader = flatFileConnector.createFemaleFlatFileConnection();
-            fileCSVLength = femaleCSVLength;
-        } else {
-            throw new RuntimeException("No such gender exist");
-        }
+
+        FlatFileItemReader<Person> fileReader = flatFileConnector.loadFlatFile(gender);
+        int fileCSVLength = flatFileConnector.loadCSVLength(gender);
         fileReader.open(new ExecutionContext());
         for (int i = 0; i < fileCSVLength; i++) {
             try {
-                if (Objects.requireNonNull(fileReader.read()).getName().equals(nameToCheck.toUpperCase())) {
+                if (fileReader.read().getName().equals(nameToCheck.toUpperCase())) {
                     System.out.println(gender + " db contains: " + nameToCheck);
                     fileReader.close();
                     return true;
@@ -56,17 +45,9 @@ public class FlatFileServiceImpl implements FlatFileService {
     @Override
     public List<String> getGenderTokens(String gender) {
 
-        FlatFileItemReader<Person> fileReader;
-        int fileCSVLength;
-        if (gender.equals("male")) {
-            fileReader = flatFileConnector.createMaleFlatFileConnection();
-            fileCSVLength = maleCSTLength;
-        } else if (gender.equals("female")) {
-            fileReader = flatFileConnector.createFemaleFlatFileConnection();
-            fileCSVLength = femaleCSVLength;
-        } else {
-            throw new RuntimeException("No such gender exist");
-        }
+        FlatFileItemReader<Person> fileReader = flatFileConnector.loadFlatFile(gender);
+        int fileCSVLength = flatFileConnector.loadCSVLength(gender);
+
         fileReader.open(new ExecutionContext());
 
         List<Person> persons = new ArrayList<>();
