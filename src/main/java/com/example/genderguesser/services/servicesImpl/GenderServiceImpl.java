@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class GenderServiceImpl implements GenderService {
+
+    private final static Logger LOGGER = Logger.getLogger(GenderServiceImpl.class.getName());
 
     private FlatFileService flatFileService;
 
@@ -47,8 +50,8 @@ public class GenderServiceImpl implements GenderService {
                 femaleCounter++;
             }
         }
-        System.out.println("maleCounter: " + maleCounter);
-        System.out.println("femaleCounter: " + femaleCounter);
+        LOGGER.info("Male names occurrence: " + maleCounter);
+        LOGGER.info("Female names occurrence: " + femaleCounter);
 
         if (maleCounter > femaleCounter) {
             return "MALE";

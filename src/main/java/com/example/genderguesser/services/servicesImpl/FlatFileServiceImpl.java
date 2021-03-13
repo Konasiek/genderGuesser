@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class FlatFileServiceImpl implements FlatFileService {
+
+    private final static Logger LOGGER = Logger.getLogger(GenderServiceImpl.class.getName());
 
     private FlatFileConnector flatFileConnector;
 
@@ -30,7 +33,7 @@ public class FlatFileServiceImpl implements FlatFileService {
         for (int i = 0; i < fileCSVLength; i++) {
             try {
                 if (fileReader.read().getName().equals(nameToCheck.toUpperCase())) {
-                    System.out.println(gender + " db contains: " + nameToCheck);
+                    LOGGER.info(nameToCheck + " has been found in " + gender + " database");
                     fileReader.close();
                     return true;
                 }
