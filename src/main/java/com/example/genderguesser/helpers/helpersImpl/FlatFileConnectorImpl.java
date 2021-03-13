@@ -15,12 +15,15 @@ public class FlatFileConnectorImpl implements FlatFileConnector {
     private static final int maleCSTLength = 23349;
     private static final int femaleCSVLength = 17381;
 
-    @Override
-    public FlatFileItemReader<Person> createMaleFlatFileConnection() {
+    private FlatFileItemReader<Person> createFlatFileConnection(String gender) {
 
-        FlatFileItemReader<Person> maleReader = new FlatFileItemReader<>();
-        maleReader.setResource(new FileSystemResource("src/main/resources/male.csv"));
-        maleReader.setLineMapper(new DefaultLineMapper<>() {
+        FlatFileItemReader<Person> fileReader = new FlatFileItemReader<>();
+        if (gender.equals("male")) {
+            fileReader.setResource(new FileSystemResource("src/main/resources/male.csv"));
+        } else if (gender.equals("female")) {
+            fileReader.setResource(new FileSystemResource("src/main/resources/female.csv"));
+        }
+        fileReader.setLineMapper(new DefaultLineMapper<>() {
             {
                 setLineTokenizer(new DelimitedLineTokenizer() {
                     {
@@ -34,39 +37,15 @@ public class FlatFileConnectorImpl implements FlatFileConnector {
                 });
             }
         });
-        return maleReader;
-    }
-
-    @Override
-    public FlatFileItemReader<Person> createFemaleFlatFileConnection() {
-
-        FlatFileItemReader<Person> femaleReader = new FlatFileItemReader<>();
-        femaleReader.setResource(new FileSystemResource("src/main/resources/female.csv"));
-        femaleReader.setLineMapper(new DefaultLineMapper<>() {
-            {
-                setLineTokenizer(new DelimitedLineTokenizer() {
-                    {
-                        setNames("name");
-                    }
-                });
-                setFieldSetMapper(new BeanWrapperFieldSetMapper<>() {
-                    {
-                        setTargetType(Person.class);
-                    }
-                });
-            }
-        });
-        return femaleReader;
+        return fileReader;
     }
 
     @Override
     public FlatFileItemReader<Person> loadFlatFile(String gender) {
 
         FlatFileItemReader<Person> fileReader;
-        if (gender.equals("male")) {
-            fileReader = createMaleFlatFileConnection();
-        } else if (gender.equals("female")) {
-            fileReader = createFemaleFlatFileConnection();
+        if (gender.equals("male") || gender.equals("female")) {
+            fileReader = createFlatFileConnection(gender);
         } else {
             throw new RuntimeException("No such gender exist");
         }
