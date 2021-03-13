@@ -4,10 +4,8 @@ import java.util.List;
 
 public interface FlatFileService {
 
-    boolean isMaleNameExist(String nameToCheck);
-
-    boolean isFemaleNameExist(String nameToCheck);
-
     List<String> getGenderTokens(String gender);
+
+    boolean isNameExist(String nameToCheck, String gender);
 }
 

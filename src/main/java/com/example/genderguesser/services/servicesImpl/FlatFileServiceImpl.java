@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class FlatFileServiceImpl implements FlatFileService {
@@ -24,51 +25,31 @@ public class FlatFileServiceImpl implements FlatFileService {
     }
 
     @Override
-    public boolean isMaleNameExist(String nameToCheck) {
-
-        FlatFileItemReader<Person> maleReader = flatFileConnector.createMaleFlatFileConnection();
-
-        maleReader.open(new ExecutionContext());
-
-        List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < maleCSTLength; i++) {
+    public boolean isNameExist(String nameToCheck, String gender) {
+        FlatFileItemReader<Person> fileReader;
+        int fileCSVLength;
+        if (gender.equals("male")) {
+            fileReader = flatFileConnector.createMaleFlatFileConnection();
+            fileCSVLength = maleCSTLength;
+        } else if (gender.equals("female")) {
+            fileReader = flatFileConnector.createFemaleFlatFileConnection();
+            fileCSVLength = femaleCSVLength;
+        } else {
+            throw new RuntimeException("No such gender exist");
+        }
+        fileReader.open(new ExecutionContext());
+        for (int i = 0; i < fileCSVLength; i++) {
             try {
-                persons.add(maleReader.read());
-                if (persons.get(i).getName().equals(nameToCheck.toUpperCase())) {
-                    System.out.println("male db contains: " + nameToCheck);
-                    maleReader.close();
+                if (Objects.requireNonNull(fileReader.read()).getName().equals(nameToCheck.toUpperCase())) {
+                    System.out.println(gender + " db contains: " + nameToCheck);
+                    fileReader.close();
                     return true;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        maleReader.close();
-        return false;
-    }
-
-    @Override
-    public boolean isFemaleNameExist(String nameToCheck) {
-
-        FlatFileItemReader<Person> femaleReader = flatFileConnector.createFemaleFlatFileConnection();
-
-        femaleReader.open(new ExecutionContext());
-
-        List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < femaleCSVLength; i++) {
-            try {
-                persons.add(femaleReader.read());
-                if (persons.get(i).getName().equals(nameToCheck.toUpperCase())) {
-                    System.out.println("female db contains: " + nameToCheck);
-                    femaleReader.close();
-                    return true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        femaleReader.close();
-
+        fileReader.close();
         return false;
     }
 

@@ -24,9 +24,9 @@ public class GenderServiceImpl implements GenderService {
 
         String nameToCheck = givenString.substring(0, givenString.indexOf(" "));
 
-        if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isMaleNameExist(nameToCheck)) {
+        if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, "male")) {
             return "MALE";
-        } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isFemaleNameExist(nameToCheck)) {
+        } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, "female")) {
             return "FEMALE";
         } else {
             return "INCONCLUSIVE";
@@ -41,9 +41,9 @@ public class GenderServiceImpl implements GenderService {
         int femaleCounter = 0;
 
         for (String nameToCheck : givenNameList) {
-            if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isMaleNameExist(nameToCheck)) {
+            if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, "male")) {
                 maleCounter++;
-            } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isFemaleNameExist(nameToCheck)) {
+            } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, "female")) {
                 femaleCounter++;
             }
         }
