@@ -2,6 +2,8 @@ package com.example.genderguesser.controllers;
 
 import com.example.genderguesser.services.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,14 +43,21 @@ public class GenderController {
     }
 
     @GetMapping("/get-tokens")
-    public ResponseEntity getTokens(@RequestParam String gender) {
+    public ResponseEntity<List<String>> getTokens(
+            @RequestParam String gender,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
 
         try {
+            Pageable paging = PageRequest.of(page, size);
+            List<String> response;
+
             if (gender.equals("male") || gender.equals("female")) {
-                return new ResponseEntity<>(genderService.getTokens(gender), HttpStatus.OK);
+                response = genderService.getTokens(gender, paging);
             } else {
-                return new ResponseEntity<>("gender must be male or female", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

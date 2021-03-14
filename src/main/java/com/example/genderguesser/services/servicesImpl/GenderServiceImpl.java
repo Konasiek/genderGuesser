@@ -3,6 +3,7 @@ package com.example.genderguesser.services.servicesImpl;
 import com.example.genderguesser.services.FlatFileService;
 import com.example.genderguesser.services.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class GenderServiceImpl implements GenderService {
     }
 
     @Override
-    public List<String> getTokens(String gender) {
-        return flatFileService.getGenderTokens(gender);
+    public List<String> getTokens(String gender, Pageable paging) {
+        return flatFileService.getGenderTokens(gender, paging);
     }
 }
