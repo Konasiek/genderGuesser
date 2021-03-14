@@ -1,6 +1,7 @@
 package com.example.genderguesser.controllers;
 
 import com.example.genderguesser.services.GenderService;
+import io.micrometer.core.lang.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ public class GenderController {
     }
 
     @GetMapping("/guess-gender")
-    public ResponseEntity<String> guessGender(@RequestParam String name, @RequestParam String guessVariant) {
+    public ResponseEntity<String> guessGender(@RequestParam @NonNull String name, @RequestParam String guessVariant) {
 
         try {
             String nameGender;
