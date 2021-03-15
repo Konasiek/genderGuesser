@@ -1,7 +1,6 @@
 package com.example.genderguesser.controllers;
 
 import com.example.genderguesser.services.GenderService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,10 +25,6 @@ class GenderControllerTest {
 
     @InjectMocks
     GenderController genderController = new GenderController(genderService);
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void guessGender() {
