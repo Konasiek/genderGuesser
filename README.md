@@ -6,7 +6,7 @@
 	java -jar gender-guesser-1.0.jar
 	
 ### API:
-####1. localhost:8080/api/guess-gender
+#### 1. localhost:8080/api/guess-gender
     params: "name", "guessVariant"
     
     example: 
@@ -19,7 +19,7 @@
     guessVariant: "multple"
     return: "INCONCLUSIVE" (Konrad is male and Ewa is female, Dąbrowski is ignored.)
     
-####2. localhost:8080/api/get-tokens
+#### 2. localhost:8080/api/get-tokens
     (pagination was natural choice for over 20k flat files records)
     (names are ordered in .csv by most usage)
     params: "gender", "page", "size"
