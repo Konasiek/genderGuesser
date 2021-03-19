@@ -1,5 +1,6 @@
 package com.example.genderguesser.services.servicesImpl;
 
+import com.example.genderguesser.models.Gender;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,58 +25,58 @@ class GenderServiceImplTest {
     @InjectMocks
     GenderServiceImpl genderService = new GenderServiceImpl(flatFileServiceImpl);
 
-//    @Test
-//    void checkSingleName() {
-//        when(this.flatFileServiceImpl.isNameExist("Adam", "male")).thenReturn(true);
-//        assertEquals("MALE", this.genderService.checkSingleName("Adam Niedzielski"));
-//
-//        when(this.flatFileServiceImpl.isNameExist("Ewa", "female")).thenReturn(true);
-//        assertEquals("FEMALE", genderService.checkSingleName("Ewa Zofia Maciąg"));
-//
-//        when(this.flatFileServiceImpl.isNameExist("Asdfsdfsdfsdf", "male")).thenReturn(false);
-//        assertEquals("INCONCLUSIVE", genderService.checkSingleName("Asdfsdfsdfsdf Zofia Maciąg"));
-//
-//        verify(this.flatFileServiceImpl, times(3)).isNameExist(anyString(), anyString());
-//    }
-//
-//    @Test
-//    void checkMultipleName() {
-//        when(this.flatFileServiceImpl.isNameExist("Maria", "female")).thenReturn(true);
-//        when(this.flatFileServiceImpl.isNameExist("Konrad", "male")).thenReturn(true);
-//        when(this.flatFileServiceImpl.isNameExist("Józef", "male")).thenReturn(true);
-//        assertEquals("MALE", this.genderService.checkMultipleName("Maria Konrad Józef"));
-//
-//        when(this.flatFileServiceImpl.isNameExist("Adam", "male")).thenReturn(true);
-//        when(this.flatFileServiceImpl.isNameExist("Ewa", "female")).thenReturn(true);
-//        when(this.flatFileServiceImpl.isNameExist("Zofia", "female")).thenReturn(true);
-//        assertEquals("FEMALE", this.genderService.checkMultipleName("Adam Ewa Zofia"));
-//
-//        when(this.flatFileServiceImpl.isNameExist("Adam", "male")).thenReturn(true);
-//        when(this.flatFileServiceImpl.isNameExist("Ewa", "female")).thenReturn(true);
-//        assertEquals("INCONCLUSIVE", this.genderService.checkMultipleName("Adam Ewa"));
-//
-//        when(this.flatFileServiceImpl.isNameExist("Anudfdf", "male")).thenReturn(false);
-//        when(this.flatFileServiceImpl.isNameExist("Knuisdf", "male")).thenReturn(false);
-//        assertEquals("INCONCLUSIVE", this.genderService.checkMultipleName("Anudfdf Knuisdf"));
-//
-//        verify(this.flatFileServiceImpl, times(10)).isNameExist(anyString(), anyString());
-//    }
-//
-//    Pageable paging;
-//    List<String> tokens;
-//
-//    @Test
-//    void getTokens() {
-//        paging = PageRequest.of(0, 4);
-//        tokens = Arrays.asList("Adam", "Krzysztof", "Zenon", "Marcin");
-//        when(this.flatFileServiceImpl.getGenderTokens("male", paging)).thenReturn(tokens);
-//        assertEquals(tokens, this.genderService.getTokens("male", paging));
-//
-//        paging = PageRequest.of(5, 8);
-//        tokens = Arrays.asList("Paulina", "Maria", "Nina", "Daria", "Edyta", "Magda", "Teresa", "Krystyna");
-//        when(this.flatFileServiceImpl.getGenderTokens("female", paging)).thenReturn(tokens);
-//        assertEquals(tokens, this.genderService.getTokens("female", paging));
-//
-//        verify(this.flatFileServiceImpl, times(2)).getGenderTokens(anyString(), any());
-//    }
+    @Test
+    void checkSingleName() {
+        when(this.flatFileServiceImpl.isNameExist("Adam", Gender.MALE)).thenReturn(true);
+        assertEquals(Gender.MALE, this.genderService.checkSingleName("Adam Niedzielski"));
+
+        when(this.flatFileServiceImpl.isNameExist("Ewa", Gender.FEMALE)).thenReturn(true);
+        assertEquals(Gender.FEMALE, genderService.checkSingleName("Ewa Zofia Maciąg"));
+
+        when(this.flatFileServiceImpl.isNameExist("Asdfsdfsdfsdf", Gender.MALE)).thenReturn(false);
+        assertEquals(Gender.INCONCLUSIVE, genderService.checkSingleName("Asdfsdfsdfsdf Zofia Maciąg"));
+
+        verify(this.flatFileServiceImpl, times(3)).isNameExist(anyString(), any());
+    }
+
+    @Test
+    void checkMultipleName() {
+        when(this.flatFileServiceImpl.isNameExist("Maria", Gender.FEMALE)).thenReturn(true);
+        when(this.flatFileServiceImpl.isNameExist("Konrad", Gender.MALE)).thenReturn(true);
+        when(this.flatFileServiceImpl.isNameExist("Józef", Gender.MALE)).thenReturn(true);
+        assertEquals(Gender.MALE, this.genderService.checkMultipleName("Maria Konrad Józef"));
+
+        when(this.flatFileServiceImpl.isNameExist("Adam", Gender.MALE)).thenReturn(true);
+        when(this.flatFileServiceImpl.isNameExist("Ewa", Gender.FEMALE)).thenReturn(true);
+        when(this.flatFileServiceImpl.isNameExist("Zofia", Gender.FEMALE)).thenReturn(true);
+        assertEquals(Gender.FEMALE, this.genderService.checkMultipleName("Adam Ewa Zofia"));
+
+        when(this.flatFileServiceImpl.isNameExist("Adam", Gender.MALE)).thenReturn(true);
+        when(this.flatFileServiceImpl.isNameExist("Ewa", Gender.FEMALE)).thenReturn(true);
+        assertEquals(Gender.INCONCLUSIVE, this.genderService.checkMultipleName("Adam Ewa"));
+
+        when(this.flatFileServiceImpl.isNameExist("Anudfdf", Gender.MALE)).thenReturn(false);
+        when(this.flatFileServiceImpl.isNameExist("Knuisdf", Gender.MALE)).thenReturn(false);
+        assertEquals(Gender.INCONCLUSIVE, this.genderService.checkMultipleName("Anudfdf Knuisdf"));
+
+        verify(this.flatFileServiceImpl, times(10)).isNameExist(anyString(), any());
+    }
+
+    Pageable paging;
+    List<String> tokens;
+
+    @Test
+    void getTokens() {
+        paging = PageRequest.of(0, 4);
+        tokens = Arrays.asList("Adam", "Krzysztof", "Zenon", "Marcin");
+        when(this.flatFileServiceImpl.getGenderTokens(Gender.MALE, paging)).thenReturn(tokens);
+        assertEquals(tokens, this.genderService.getTokens(Gender.MALE, paging));
+
+        paging = PageRequest.of(5, 8);
+        tokens = Arrays.asList("Paulina", "Maria", "Nina", "Daria", "Edyta", "Magda", "Teresa", "Krystyna");
+        when(this.flatFileServiceImpl.getGenderTokens(Gender.FEMALE, paging)).thenReturn(tokens);
+        assertEquals(tokens, this.genderService.getTokens(Gender.FEMALE, paging));
+
+        verify(this.flatFileServiceImpl, times(2)).getGenderTokens(any(), any());
+    }
 }
