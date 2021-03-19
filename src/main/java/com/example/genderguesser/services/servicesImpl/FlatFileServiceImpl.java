@@ -30,11 +30,18 @@ public class FlatFileServiceImpl implements FlatFileService {
     public boolean isNameExist(String nameToCheck, String gender) {
 
         FlatFileItemReader<Person> fileReader = flatFileConnector.loadFlatFile(gender);
-        int fileCSVLength = flatFileConnector.loadCSVLength(gender);
         fileReader.open(new ExecutionContext());
-        for (int i = 0; i < fileCSVLength; i++) {
+        Person lastRead;
+
+        while (true) {
             try {
-                if (Objects.requireNonNull(fileReader.read()).getName().equals(nameToCheck.toUpperCase())) {
+                lastRead = fileReader.read();
+
+                if (lastRead == null) {
+                    fileReader.close();
+                    return false;
+                }
+                if (lastRead.getName().equals(nameToCheck.toUpperCase())) {
                     LOGGER.info(nameToCheck + " has been found in " + gender + " database");
                     fileReader.close();
                     return true;
@@ -43,8 +50,6 @@ public class FlatFileServiceImpl implements FlatFileService {
                 e.printStackTrace();
             }
         }
-        fileReader.close();
-        return false;
     }
 
     @Override

@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class FlatFileConnectorImpl implements FlatFileConnector {
 
-    private static final int maleCSTLength = 23349;
-    private static final int femaleCSVLength = 17381;
-
     private FlatFileItemReader<Person> createFlatFileConnection(String gender) {
 
         FlatFileItemReader<Person> fileReader = new FlatFileItemReader<>();
@@ -50,19 +47,5 @@ public class FlatFileConnectorImpl implements FlatFileConnector {
             throw new RuntimeException("No such gender exist");
         }
         return fileReader;
-    }
-
-    @Override
-    public int loadCSVLength(String gender) {
-
-        int fileCSVLength;
-        if (gender.equals("male")) {
-            fileCSVLength = maleCSTLength;
-        } else if (gender.equals("female")) {
-            fileCSVLength = femaleCSVLength;
-        } else {
-            throw new RuntimeException("No such gender exist");
-        }
-        return fileCSVLength;
     }
 }

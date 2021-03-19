@@ -23,12 +23,4 @@ class FlatFileConnectorImplTest {
     @Disabled
     void loadFlatFile() {
     }
-
-    @Test
-    void loadCSVLength() {
-        int maleCSTLength = 23349;
-        assertEquals(maleCSTLength, this.flatFileConnectorImpl.loadCSVLength("male"));
-        int femaleCSVLength = 17381;
-        assertEquals(femaleCSVLength, this.flatFileConnectorImpl.loadCSVLength("female"));
-    }
 }

@@ -6,6 +6,4 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 public interface FlatFileConnector {
 
     FlatFileItemReader<Person> loadFlatFile(String gender);
-
-    int loadCSVLength(String gender);
 }
