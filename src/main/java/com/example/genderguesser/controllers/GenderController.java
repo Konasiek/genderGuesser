@@ -1,5 +1,6 @@
 package com.example.genderguesser.controllers;
 
+import com.example.genderguesser.models.Gender;
 import com.example.genderguesser.models.GuessVariant;
 import com.example.genderguesser.services.GenderService;
 import io.micrometer.core.lang.NonNull;
@@ -57,7 +58,7 @@ public class GenderController {
             Pageable paging = PageRequest.of(page, size);
             List<String> response;
 
-            if (gender.equals("male") || gender.equals("female")) {
+            if (gender.equals(Gender.MALE.getName()) || gender.equals(Gender.FEMALE.getName())) {
                 response = genderService.getTokens(gender, paging);
             } else {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

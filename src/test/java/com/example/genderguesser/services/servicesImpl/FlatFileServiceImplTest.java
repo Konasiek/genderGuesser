@@ -31,33 +31,33 @@ class FlatFileServiceImplTest {
     @Mock
     FlatFileItemReader<Person> fileReader;
 
-    @Test
-    @Disabled
-    void isNameExist() throws Exception {
-        fileReader = new FlatFileItemReader<>();
-        FlatFileItemReader<Person> fileReader = new FlatFileItemReader<>();
-        fileReader.setResource(new FileSystemResource("src/main/resources/male.csv"));
-
-        fileReader.setLineMapper(new DefaultLineMapper<>() {
-            {
-                setLineTokenizer(new DelimitedLineTokenizer() {
-                    {
-                        setNames("name");
-                    }
-                });
-                setFieldSetMapper(new BeanWrapperFieldSetMapper<>() {
-                    {
-                        setTargetType(Person.class);
-                    }
-                });
-            }
-        });
-        fileReader.open(new ExecutionContext());
-        Person person = fileReader.read();
-        fileReader.close();
-        when(this.flatFileConnectorImpl.loadFlatFile("male")).thenReturn(fileReader);
-        assertTrue(this.flatFileServiceImpl.isNameExist(person.getName(), "male"));
-    }
+//    @Test
+//    @Disabled
+//    void isNameExist() throws Exception {
+//        fileReader = new FlatFileItemReader<>();
+//        FlatFileItemReader<Person> fileReader = new FlatFileItemReader<>();
+//        fileReader.setResource(new FileSystemResource("src/main/resources/male.csv"));
+//
+//        fileReader.setLineMapper(new DefaultLineMapper<>() {
+//            {
+//                setLineTokenizer(new DelimitedLineTokenizer() {
+//                    {
+//                        setNames("name");
+//                    }
+//                });
+//                setFieldSetMapper(new BeanWrapperFieldSetMapper<>() {
+//                    {
+//                        setTargetType(Person.class);
+//                    }
+//                });
+//            }
+//        });
+//        fileReader.open(new ExecutionContext());
+//        Person person = fileReader.read();
+//        fileReader.close();
+//        when(this.flatFileConnectorImpl.loadFlatFile("male")).thenReturn(fileReader);
+//        assertTrue(this.flatFileServiceImpl.isNameExist(person.getName(), "male"));
+//    }
 
     @Test
     @Disabled

@@ -1,5 +1,6 @@
 package com.example.genderguesser.services.servicesImpl;
 
+import com.example.genderguesser.models.Gender;
 import com.example.genderguesser.services.FlatFileService;
 import com.example.genderguesser.services.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,12 @@ public class GenderServiceImpl implements GenderService {
 
         String nameToCheck = givenString.substring(0, givenString.indexOf(" "));
 
-        if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, "male")) {
-            return "MALE";
-        } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, "female")) {
-            return "FEMALE";
+        if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.MALE.getName())) {
+            return Gender.MALE.getName();
+        } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.FEMALE.getName())) {
+            return Gender.FEMALE.getName();
         } else {
-            return "INCONCLUSIVE";
+            return Gender.INCONCLUSIVE.getName();
         }
     }
 
@@ -45,21 +46,21 @@ public class GenderServiceImpl implements GenderService {
         int femaleCounter = 0;
 
         for (String nameToCheck : givenNameList) {
-            if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, "male")) {
+            if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.MALE.getName())) {
                 maleCounter++;
-            } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, "female")) {
+            } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.FEMALE.getName())) {
                 femaleCounter++;
             }
         }
-        LOGGER.info("Male names occurrence: " + maleCounter);
-        LOGGER.info("Female names occurrence: " + femaleCounter);
+        LOGGER.info(Gender.MALE + " names occurrence: " + maleCounter);
+        LOGGER.info(Gender.FEMALE + " names occurrence: " + femaleCounter);
 
         if (maleCounter > femaleCounter) {
-            return "MALE";
+            return Gender.MALE.getName();
         } else if (femaleCounter > maleCounter) {
-            return "FEMALE";
+            return Gender.FEMALE.getName();
         } else {
-            return "INCONCLUSIVE";
+            return Gender.INCONCLUSIVE.getName();
         }
     }
 

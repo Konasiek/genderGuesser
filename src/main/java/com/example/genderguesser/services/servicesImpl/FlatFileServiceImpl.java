@@ -1,6 +1,7 @@
 package com.example.genderguesser.services.servicesImpl;
 
 import com.example.genderguesser.helpers.FlatFileConnector;
+import com.example.genderguesser.models.Gender;
 import com.example.genderguesser.models.Person;
 import com.example.genderguesser.services.FlatFileService;
 import org.springframework.batch.item.ExecutionContext;

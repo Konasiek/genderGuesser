@@ -11,12 +11,12 @@
     
     example: 
     name: "Konrad Ewa Dąbrowski"
-    guessVariant: "single"
+    guessVariant: "SINGLE"
     return: "MALE" (because only Konrad was used to check gender)
     
     example:
     name: "Konrad Ewa Dąbrowski"
-    guessVariant: "multple"
+    guessVariant: "MULTIPLE"
     return: "INCONCLUSIVE" (Konrad is male and Ewa is female, Dąbrowski is ignored.)
     
 #### 2. localhost:8080/api/get-tokens
@@ -25,7 +25,7 @@
     params: "gender", "page", "size"
     
     example: 
-    gender: "male"
+    gender: "MALE"
     page: "0"
     size: "5"
     return: "PIOTR", "ANDRZEJ", "PAWEŁ", "MICHAŁ", "JAKUB"

@@ -1,6 +1,7 @@
 package com.example.genderguesser.helpers.helpersImpl;
 
 import com.example.genderguesser.helpers.FlatFileConnector;
+import com.example.genderguesser.models.Gender;
 import com.example.genderguesser.models.Person;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
@@ -15,9 +16,9 @@ public class FlatFileConnectorImpl implements FlatFileConnector {
     private FlatFileItemReader<Person> createFlatFileConnection(String gender) {
 
         FlatFileItemReader<Person> fileReader = new FlatFileItemReader<>();
-        if (gender.equals("male")) {
+        if (gender.equals(Gender.MALE.getName())) {
             fileReader.setResource(new FileSystemResource("src/main/resources/male.csv"));
-        } else if (gender.equals("female")) {
+        } else if (gender.equals(Gender.FEMALE.getName())) {
             fileReader.setResource(new FileSystemResource("src/main/resources/female.csv"));
         }
         fileReader.setLineMapper(new DefaultLineMapper<>() {
@@ -41,7 +42,7 @@ public class FlatFileConnectorImpl implements FlatFileConnector {
     public FlatFileItemReader<Person> loadFlatFile(String gender) {
 
         FlatFileItemReader<Person> fileReader;
-        if (gender.equals("male") || gender.equals("female")) {
+        if (gender.equals(Gender.MALE.getName()) || gender.equals(Gender.FEMALE.getName())) {
             fileReader = createFlatFileConnection(gender);
         } else {
             throw new RuntimeException("No such gender exist");
