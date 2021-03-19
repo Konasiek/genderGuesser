@@ -29,15 +29,18 @@ class GenderServiceImplTest {
     @Test
     void checkSingleName() {
         when(this.flatFileServiceImpl.isNameExist("Adam", Gender.MALE)).thenReturn(true);
+        when(this.flatFileServiceImpl.isNameExist("Adam", Gender.FEMALE)).thenReturn(false);
         assertEquals(Gender.MALE, this.genderService.checkSingleName("Adam Niedzielski"));
 
+        when(this.flatFileServiceImpl.isNameExist("Ewa", Gender.MALE)).thenReturn(false);
         when(this.flatFileServiceImpl.isNameExist("Ewa", Gender.FEMALE)).thenReturn(true);
         assertEquals(Gender.FEMALE, genderService.checkSingleName("Ewa Zofia Maciąg"));
 
         when(this.flatFileServiceImpl.isNameExist("Asdfsdfsdfsdf", Gender.MALE)).thenReturn(false);
+        when(this.flatFileServiceImpl.isNameExist("Asdfsdfsdfsdf", Gender.FEMALE)).thenReturn(false);
         assertEquals(Gender.INCONCLUSIVE, genderService.checkSingleName("Asdfsdfsdfsdf Zofia Maciąg"));
 
-        verify(this.flatFileServiceImpl, times(3)).isNameExist(anyString(), any());
+        verify(this.flatFileServiceImpl, times(6)).isNameExist(anyString(), any());
     }
 
     @Test

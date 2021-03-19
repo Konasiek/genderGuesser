@@ -30,7 +30,7 @@
     size: "5"
     return: "PIOTR", "ANDRZEJ", "PAWEŁ", "MICHAŁ", "JAKUB"
 
-### Algorithm versions for checkmultipleName():
+### Algorithm versions for checkMultipleName():
 
     commit: fef9e75e3287774c8db0d44c85c5eea622067798
     dummy method checks only 4 given names with counter male/female occurance
@@ -44,6 +44,10 @@
     commit: ef4be92d677f53d8a903aaa8ab93269761236099
     considering that name ending letter is valid information in polish names
     
+    *after feedback:
+    commit: 65eb0b83adad27c48068835ac5d8b56365f0bc93
+    fixing 'Kuba problem', now algorithm checks both male and female DBs and then letter -a 
+    
 ### Algorithm versions for getGenderTokens():
 
     commit 64ad9b98b0ec2023d02dc73bf54e95c077d8a74f
@@ -54,6 +58,8 @@
     
 ### list of fixed bugs:
 
-    - keeping .csv file lenght in for loop -> while loop (.csv files may be swaped without changing manualy property in app)
+    - depending on .csv file lenght in for loop -> while loop (.csv files may be swaped without necessity of changing property in app)
     - using Enums insted of simple Strings
+    - changing implementation of checkMultipleName and checkSingleName methods (solving 'Kuba problem')
+    
     
