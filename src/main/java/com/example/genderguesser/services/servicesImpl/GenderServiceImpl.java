@@ -46,12 +46,27 @@ public class GenderServiceImpl implements GenderService {
         int femaleCounter = 0;
 
         for (String nameToCheck : givenNameList) {
-            if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.MALE)) {
+            boolean existInMaleDB = false;
+            boolean existInFemaleDB = false;
+            if (flatFileService.isNameExist(nameToCheck, Gender.MALE)) {
+                existInMaleDB = true;
+            }
+            if (flatFileService.isNameExist(nameToCheck, Gender.FEMALE)) {
+                existInFemaleDB = true;
+            }
+            if (existInMaleDB && existInFemaleDB) {
+                if (!nameToCheck.toUpperCase().endsWith("A")) {
+                    maleCounter++;
+                } else {
+                    femaleCounter++;
+                }
+            } else if (existInMaleDB) {
                 maleCounter++;
-            } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.FEMALE)) {
+            } else if (existInFemaleDB) {
                 femaleCounter++;
             }
         }
+
         LOGGER.info(Gender.MALE + " names occurrence: " + maleCounter);
         LOGGER.info(Gender.FEMALE + " names occurrence: " + femaleCounter);
 
