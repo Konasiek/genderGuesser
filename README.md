@@ -7,7 +7,7 @@
 	
 ### API:
 #### 1. localhost:8080/api/guess-gender
-    params: "name", "guessVariant"
+    params: "name", "guessVariant"  (default value for guessVariant = "SINGLE")
     
     example: 
     name: "Konrad Ewa Dąbrowski"
@@ -52,7 +52,8 @@
     commit: 88935e833138ccc034d58332975185aafb6fb2de
     method is now returning only limited data depending on requested page and pagesize
     
-### log of fixed bugs:
+### list of fixed bugs:
 
-    - keeping .csv file lenght in in for loop -> while loop (.csv files may be swaped without changing manualy property in app)
+    - keeping .csv file lenght in for loop -> while loop (.csv files may be swaped without changing manualy property in app)
+    - using Enums insted of simple Strings
     

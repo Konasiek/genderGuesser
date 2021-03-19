@@ -28,21 +28,20 @@ public class GenderController {
     }
 
     @GetMapping("/guess-gender")
-    public ResponseEntity<String> guessGender(@RequestParam("name") @NonNull String name,
-                                              @RequestParam("guessVariant") String guessVariant) {
+    public ResponseEntity<Gender> guessGender(
+            @RequestParam("name") String name,
+            @RequestParam(value = "guessVariant", defaultValue = "SINGLE") GuessVariant guessVariant) {
 
         try {
-            String nameGender;
-            if (guessVariant.equals(GuessVariant.SINGLE.getName())) {
-                nameGender = genderService.checkSingleName(name);
-            } else if (guessVariant.equals(GuessVariant.MULTIPLE.getName())) {
-                nameGender = genderService.checkMultipleName(name);
+            Gender guessedGender;
+            if (guessVariant.equals(GuessVariant.SINGLE)) {
+                guessedGender = genderService.checkSingleName(name);
+            } else if (guessVariant.equals(GuessVariant.MULTIPLE)) {
+                guessedGender = genderService.checkMultipleName(name);
             } else {
-                return new ResponseEntity<>(
-                        "guess variant must be " + GuessVariant.SINGLE.getName() + " or " + GuessVariant.MULTIPLE.getName(),
-                        HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(nameGender, HttpStatus.OK);
+            return new ResponseEntity<>(guessedGender, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -50,7 +49,7 @@ public class GenderController {
 
     @GetMapping("/get-tokens")
     public ResponseEntity<List<String>> getTokens(
-            @RequestParam String gender,
+            @RequestParam Gender gender,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
 
@@ -58,7 +57,7 @@ public class GenderController {
             Pageable paging = PageRequest.of(page, size);
             List<String> response;
 
-            if (gender.equals(Gender.MALE.getName()) || gender.equals(Gender.FEMALE.getName())) {
+            if (gender.equals(Gender.MALE) || gender.equals(Gender.FEMALE)) {
                 response = genderService.getTokens(gender, paging);
             } else {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

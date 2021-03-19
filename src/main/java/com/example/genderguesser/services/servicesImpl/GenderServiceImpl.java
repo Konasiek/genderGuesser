@@ -25,30 +25,30 @@ public class GenderServiceImpl implements GenderService {
     }
 
     @Override
-    public String checkSingleName(String givenString) {
+    public Gender checkSingleName(String givenString) {
 
         String nameToCheck = givenString.substring(0, givenString.indexOf(" "));
 
-        if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.MALE.getName())) {
-            return Gender.MALE.getName();
-        } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.FEMALE.getName())) {
-            return Gender.FEMALE.getName();
+        if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.MALE)) {
+            return Gender.MALE;
+        } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.FEMALE)) {
+            return Gender.FEMALE;
         } else {
-            return Gender.INCONCLUSIVE.getName();
+            return Gender.INCONCLUSIVE;
         }
     }
 
     @Override
-    public String checkMultipleName(String givenString) {
+    public Gender checkMultipleName(String givenString) {
 
         List<String> givenNameList = new ArrayList<>(Arrays.asList(givenString.split(" ")));
         int maleCounter = 0;
         int femaleCounter = 0;
 
         for (String nameToCheck : givenNameList) {
-            if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.MALE.getName())) {
+            if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.MALE)) {
                 maleCounter++;
-            } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.FEMALE.getName())) {
+            } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.FEMALE)) {
                 femaleCounter++;
             }
         }
@@ -56,16 +56,16 @@ public class GenderServiceImpl implements GenderService {
         LOGGER.info(Gender.FEMALE + " names occurrence: " + femaleCounter);
 
         if (maleCounter > femaleCounter) {
-            return Gender.MALE.getName();
+            return Gender.MALE;
         } else if (femaleCounter > maleCounter) {
-            return Gender.FEMALE.getName();
+            return Gender.FEMALE;
         } else {
-            return Gender.INCONCLUSIVE.getName();
+            return Gender.INCONCLUSIVE;
         }
     }
 
     @Override
-    public List<String> getTokens(String gender, Pageable paging) {
+    public List<String> getTokens(Gender gender, Pageable paging) {
         return flatFileService.getGenderTokens(gender, paging);
     }
 }

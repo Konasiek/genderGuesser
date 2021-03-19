@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 @Service
@@ -28,7 +27,7 @@ public class FlatFileServiceImpl implements FlatFileService {
     }
 
     @Override
-    public boolean isNameExist(String nameToCheck, String gender) {
+    public boolean isNameExist(String nameToCheck, Gender gender) {
 
         FlatFileItemReader<Person> fileReader = flatFileConnector.loadFlatFile(gender);
         fileReader.open(new ExecutionContext());
@@ -54,7 +53,7 @@ public class FlatFileServiceImpl implements FlatFileService {
     }
 
     @Override
-    public List<String> getGenderTokens(String gender, Pageable paging) {
+    public List<String> getGenderTokens(Gender gender, Pageable paging) {
         FlatFileItemReader<Person> fileReader = flatFileConnector.loadFlatFile(gender);
 
         fileReader.open(new ExecutionContext());

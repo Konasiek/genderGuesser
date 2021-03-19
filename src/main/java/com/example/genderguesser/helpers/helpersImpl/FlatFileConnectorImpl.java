@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class FlatFileConnectorImpl implements FlatFileConnector {
 
-    private FlatFileItemReader<Person> createFlatFileConnection(String gender) {
+    private FlatFileItemReader<Person> createFlatFileConnection(Gender gender) {
 
         FlatFileItemReader<Person> fileReader = new FlatFileItemReader<>();
-        if (gender.equals(Gender.MALE.getName())) {
+        if (gender.equals(Gender.MALE)) {
             fileReader.setResource(new FileSystemResource("src/main/resources/male.csv"));
-        } else if (gender.equals(Gender.FEMALE.getName())) {
+        } else if (gender.equals(Gender.FEMALE)) {
             fileReader.setResource(new FileSystemResource("src/main/resources/female.csv"));
         }
         fileReader.setLineMapper(new DefaultLineMapper<>() {
@@ -39,10 +39,10 @@ public class FlatFileConnectorImpl implements FlatFileConnector {
     }
 
     @Override
-    public FlatFileItemReader<Person> loadFlatFile(String gender) {
+    public FlatFileItemReader<Person> loadFlatFile(Gender gender) {
 
         FlatFileItemReader<Person> fileReader;
-        if (gender.equals(Gender.MALE.getName()) || gender.equals(Gender.FEMALE.getName())) {
+        if (gender.equals(Gender.MALE) || gender.equals(Gender.FEMALE)) {
             fileReader = createFlatFileConnection(gender);
         } else {
             throw new RuntimeException("No such gender exist");
