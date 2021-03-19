@@ -2,8 +2,8 @@ package com.example.genderguesser.models;
 
 public enum GuessVariant {
 
-    single("single"),
-    multiple("multiple");
+    SINGLE("SINGLE"),
+    MULTIPLE("MULTIPLE");
 
     private String name;
 

@@ -32,13 +32,13 @@ public class GenderController {
 
         try {
             String nameGender;
-            if (guessVariant.equals(GuessVariant.single.getName())) {
+            if (guessVariant.equals(GuessVariant.SINGLE.getName())) {
                 nameGender = genderService.checkSingleName(name);
-            } else if (guessVariant.equals(GuessVariant.multiple.getName())) {
+            } else if (guessVariant.equals(GuessVariant.MULTIPLE.getName())) {
                 nameGender = genderService.checkMultipleName(name);
             } else {
                 return new ResponseEntity<>(
-                        "guess variant must be " + GuessVariant.single.getName() + " or " + GuessVariant.multiple.getName(),
+                        "guess variant must be " + GuessVariant.SINGLE.getName() + " or " + GuessVariant.MULTIPLE.getName(),
                         HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(nameGender, HttpStatus.OK);
