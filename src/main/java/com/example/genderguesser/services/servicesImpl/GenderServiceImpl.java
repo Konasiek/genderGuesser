@@ -29,9 +29,24 @@ public class GenderServiceImpl implements GenderService {
 
         String nameToCheck = givenString.substring(0, givenString.indexOf(" "));
 
-        if (!nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.MALE)) {
+        boolean existInMaleDB = false;
+        boolean existInFemaleDB = false;
+        if (flatFileService.isNameExist(nameToCheck, Gender.MALE)) {
+            existInMaleDB = true;
+        }
+        if (flatFileService.isNameExist(nameToCheck, Gender.FEMALE)) {
+            existInFemaleDB = true;
+        }
+
+        if (existInMaleDB && existInFemaleDB) {
+            if (!nameToCheck.toUpperCase().endsWith("A")) {
+                return Gender.MALE;
+            } else {
+                return Gender.FEMALE;
+            }
+        } else if (existInMaleDB) {
             return Gender.MALE;
-        } else if (nameToCheck.toUpperCase().endsWith("A") && flatFileService.isNameExist(nameToCheck, Gender.FEMALE)) {
+        } else if (existInFemaleDB) {
             return Gender.FEMALE;
         } else {
             return Gender.INCONCLUSIVE;
