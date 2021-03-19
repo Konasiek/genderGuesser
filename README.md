@@ -52,3 +52,7 @@
     commit: 88935e833138ccc034d58332975185aafb6fb2de
     method is now returning only limited data depending on requested page and pagesize
     
+### log of fixed bugs:
+
+    - keeping .csv file lenght in in for loop -> while loop (.csv files may be swaped without changing manualy property in app)
+    

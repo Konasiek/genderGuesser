@@ -1,5 +1,6 @@
 package com.example.genderguesser.controllers;
 
+import com.example.genderguesser.models.GuessVariant;
 import com.example.genderguesser.services.GenderService;
 import io.micrometer.core.lang.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +27,19 @@ public class GenderController {
     }
 
     @GetMapping("/guess-gender")
-    public ResponseEntity<String> guessGender(@RequestParam @NonNull String name, @RequestParam String guessVariant) {
+    public ResponseEntity<String> guessGender(@RequestParam("name") @NonNull String name,
+                                              @RequestParam("guessVariant") String guessVariant) {
 
         try {
             String nameGender;
-            if (guessVariant.equals("single")) {
+            if (guessVariant.equals(GuessVariant.single.getName())) {
                 nameGender = genderService.checkSingleName(name);
-            } else if (guessVariant.equals("multiple")) {
+            } else if (guessVariant.equals(GuessVariant.multiple.getName())) {
                 nameGender = genderService.checkMultipleName(name);
             } else {
-                return new ResponseEntity<>("guess variant must be single or multiple", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(
+                        "guess variant must be " + GuessVariant.single.getName() + " or " + GuessVariant.multiple.getName(),
+                        HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(nameGender, HttpStatus.OK);
         } catch (Exception e) {
