@@ -61,5 +61,6 @@
     - depending on .csv file lenght in for loop -> while loop (.csv files may be swaped without necessity of changing property in app)
     - using Enums insted of simple Strings
     - changing implementation of checkMultipleName and checkSingleName methods (solving 'Kuba problem')
+    - name separators in given names are now: ",.;` !'*+_/-" witout quote marks
     
     

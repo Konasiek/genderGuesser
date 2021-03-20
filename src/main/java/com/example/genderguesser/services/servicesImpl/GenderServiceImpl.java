@@ -27,7 +27,8 @@ public class GenderServiceImpl implements GenderService {
     @Override
     public Gender checkSingleName(String givenString) {
 
-        String nameToCheck = givenString.substring(0, givenString.indexOf(" "));
+        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenString.split("[,.;` !'*+_/-]")));
+        String nameToCheck = givenNameList.get(0);
 
         boolean existInMaleDB = false;
         boolean existInFemaleDB = false;
@@ -56,7 +57,7 @@ public class GenderServiceImpl implements GenderService {
     @Override
     public Gender checkMultipleName(String givenString) {
 
-        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenString.split(" ")));
+        List<String> givenNameList = new ArrayList<>(Arrays.asList(givenString.split("[,.;` !'*+_/-]")));
         int maleCounter = 0;
         int femaleCounter = 0;
 
