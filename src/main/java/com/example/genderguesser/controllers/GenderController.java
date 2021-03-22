@@ -56,9 +56,9 @@ public class GenderController {
         }
     }
 
-    @GetMapping("/get-tokens")
-    public ResponseEntity<Page<Person>> getTokens(
-            @RequestParam Gender gender,
+    @GetMapping("/get-tokens/{gender}")
+    public ResponseEntity<EntityModel<Page<Person>>> getTokens(
+            @PathVariable Gender gender,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
 
@@ -71,7 +71,9 @@ public class GenderController {
             } else {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            Link link = linkTo(methodOn(GenderController.class).getTokens(gender, page, size)).withSelfRel();
+            EntityModel getTokensResponseEntityModel = EntityModel.of(response, link);
+            return new ResponseEntity<>(getTokensResponseEntityModel, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
