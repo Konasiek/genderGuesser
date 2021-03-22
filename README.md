@@ -7,17 +7,38 @@
 	
 ### API:
 #### 1. localhost:8080/api/guess-gender
-    params: "name", "guessVariant"  (default value for guessVariant = "SINGLE")
-    
-    example: 
+    path variables: "name"/"guessVariant"  (variable guessVariant in no required, default value for guessVariant = "SINGLE")
+  
+    example: localhost:8080/api/guess-gender/Konrad Ewa Dąbrowski
     name: "Konrad Ewa Dąbrowski"
     guessVariant: "SINGLE"
-    return: "MALE" (because only Konrad was used to check gender)
+    -> "MALE" (because only Konrad was used to check gender.)
+    return: {
+                "name": "Konrad Ewa Dąbrowski",
+                "gender": "MALE",
+                "guessVariant": "SINGLE",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/guess-gender/Konrad%20Ewa%20D%C4%85browski/SINGLE"
+                    }
+                }
+            }
     
-    example:
+    example: localhost:8080/api/guess-gender/Konrad Ewa Dąbrowski/MULTIPLE
     name: "Konrad Ewa Dąbrowski"
     guessVariant: "MULTIPLE"
-    return: "INCONCLUSIVE" (Konrad is male and Ewa is female, Dąbrowski is ignored.)
+    -> "INCONCLUSIVE" (Konrad is male and Ewa is female, Dąbrowski is ignored.)
+    RESTful return: {
+                        "name": "Konrad Ewa Dąbrowski",
+                        "gender": "INCONCLUSIVE",
+                        "guessVariant": "MULTIPLE",
+                        "_links": {
+                            "self": {
+                                "href": "http://localhost:8080/api/guess-gender/Konrad%20Ewa%20D%C4%85browski/MULTIPLE"
+                            }
+                        }
+                    }
+     
     
 #### 2. localhost:8080/api/get-tokens
     (pagination was natural choice for over 20k flat files records)
@@ -48,6 +69,9 @@
     commit: 65eb0b83adad27c48068835ac5d8b56365f0bc93
     fixing 'Kuba problem', now algorithm checks both male and female DBs and then letter -a 
     
+    commit: e054518b419d34f3ca2dedaa99d335c6f7a76509
+    changing name separators
+    
 ### Algorithm versions for getGenderTokens():
 
     commit 64ad9b98b0ec2023d02dc73bf54e95c077d8a74f
@@ -61,6 +85,6 @@
     - depending on .csv file lenght in for loop -> while loop (.csv files may be swaped without necessity of changing property in app)
     - using Enums insted of simple Strings
     - changing implementation of checkMultipleName and checkSingleName methods (solving 'Kuba problem')
-    - name separators in given names are now: ",.;` !'*+_/-" witout quote marks
+    - name separators in given names are now: ",.;` !'*+_-" witout quote marks
     
     

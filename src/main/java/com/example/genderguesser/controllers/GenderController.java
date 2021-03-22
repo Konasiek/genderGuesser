@@ -1,20 +1,22 @@
 package com.example.genderguesser.controllers;
 
 import com.example.genderguesser.models.Gender;
+import com.example.genderguesser.models.GenderResponse;
 import com.example.genderguesser.models.GuessVariant;
 import com.example.genderguesser.services.GenderService;
-import io.micrometer.core.lang.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/")
@@ -27,21 +29,26 @@ public class GenderController {
         this.genderService = genderService;
     }
 
-    @GetMapping("/guess-gender")
-    public ResponseEntity<Gender> guessGender(
-            @RequestParam("name") String name,
-            @RequestParam(value = "guessVariant", defaultValue = "SINGLE") GuessVariant guessVariant) {
+    @GetMapping(value = {"/guess-gender/{name}/{guessVariant}", "/guess-gender/{name}"}, produces = {"application/hal+json"})
+    public ResponseEntity<EntityModel<GenderResponse>> guessGender(
+            @PathVariable("name") String name,
+            @PathVariable(value = "guessVariant", required = false) GuessVariant guessVariant) {
 
         try {
             Gender guessedGender;
-            if (guessVariant.equals(GuessVariant.SINGLE)) {
+            if (guessVariant == null || guessVariant.equals(GuessVariant.SINGLE)) {
+                guessVariant = GuessVariant.SINGLE;
                 guessedGender = genderService.checkSingleName(name);
             } else if (guessVariant.equals(GuessVariant.MULTIPLE)) {
                 guessedGender = genderService.checkMultipleName(name);
             } else {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(guessedGender, HttpStatus.OK);
+            GenderResponse genderResponse = new GenderResponse(name, guessedGender, guessVariant);
+            Link link = linkTo(methodOn(GenderController.class).guessGender(name, guessVariant)).withSelfRel();
+            EntityModel guessGenderResponseEntityModel = EntityModel.of(genderResponse, link);
+
+            return new ResponseEntity<EntityModel<GenderResponse>>(guessGenderResponseEntityModel, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
