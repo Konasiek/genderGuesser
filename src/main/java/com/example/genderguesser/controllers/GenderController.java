@@ -56,11 +56,11 @@ public class GenderController {
         }
     }
 
-    @GetMapping("/get-tokens/{gender}")
+    @GetMapping(value = "/get-tokens/{gender}", produces = {"application/hal+json"})
     public ResponseEntity<EntityModel<Page<Person>>> getTokens(
             @PathVariable Gender gender,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size) {
+            @RequestParam(defaultValue = "10") int size) {
 
         try {
             Pageable paging = PageRequest.of(page, size);

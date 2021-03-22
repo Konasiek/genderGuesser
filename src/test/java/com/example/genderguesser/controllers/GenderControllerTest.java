@@ -1,16 +1,21 @@
 package com.example.genderguesser.controllers;
 
 import com.example.genderguesser.models.Gender;
+import com.example.genderguesser.models.GenderResponse;
 import com.example.genderguesser.models.GuessVariant;
+import com.example.genderguesser.models.Person;
 import com.example.genderguesser.services.GenderService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -19,6 +24,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @ExtendWith(MockitoExtension.class)
 class GenderControllerTest {
@@ -29,53 +36,58 @@ class GenderControllerTest {
     @InjectMocks
     GenderController genderController = new GenderController(genderService);
 
+    GenderResponse genderResponse;
+    Link link;
+    EntityModel<GenderResponse> genderResponseEntityModel;
+    ResponseEntity<EntityModel<GenderResponse>> responseGender;
+
     @Test
     void guessGender() {
+        genderResponse = new GenderResponse("Konrad Ewa Dąbrowski", Gender.MALE, GuessVariant.SINGLE);
+        link = linkTo(methodOn(GenderController.class).guessGender("Konrad Ewa Dąbrowski", GuessVariant.SINGLE)).withSelfRel();
+        genderResponseEntityModel = EntityModel.of(genderResponse, link);
+        responseGender = new ResponseEntity<>(genderResponseEntityModel, HttpStatus.OK);
 
-        ResponseEntity<Gender> maleResponseEntity = new ResponseEntity<>(Gender.MALE, HttpStatus.OK);
-        ResponseEntity<Gender> femaleResponseEntity = new ResponseEntity<>(Gender.FEMALE, HttpStatus.OK);
-        ResponseEntity<Gender> inconclusiveResponseEntity = new ResponseEntity<>(Gender.INCONCLUSIVE, HttpStatus.OK);
+        when(this.genderService.checkSingleName("Konrad Ewa Dąbrowski")).thenReturn(Gender.MALE);
+        assertEquals(responseGender, genderController.guessGender("Konrad Ewa Dąbrowski", GuessVariant.SINGLE));
 
-        when(this.genderService.checkSingleName("Mateusz Ewa Dobrowolski")).thenReturn(Gender.MALE);
-        assertEquals(maleResponseEntity, genderController.guessGender("Mateusz Ewa Dobrowolski", GuessVariant.SINGLE));
-
-        when(this.genderService.checkSingleName("Paulina")).thenReturn(Gender.FEMALE);
-        assertEquals(femaleResponseEntity, genderController.guessGender("Paulina", GuessVariant.SINGLE));
-
-        when(this.genderService.checkSingleName("")).thenReturn(Gender.INCONCLUSIVE);
-        assertEquals(inconclusiveResponseEntity, genderController.guessGender("", GuessVariant.SINGLE));
+        genderResponse = new GenderResponse("Mateusz Ewa Jan", Gender.MALE, GuessVariant.MULTIPLE);
+        link = linkTo(methodOn(GenderController.class).guessGender("Mateusz Ewa Jan", GuessVariant.MULTIPLE)).withSelfRel();
+        genderResponseEntityModel = EntityModel.of(genderResponse, link);
+        responseGender = new ResponseEntity<>(genderResponseEntityModel, HttpStatus.OK);
 
         when(this.genderService.checkMultipleName("Mateusz Ewa Jan")).thenReturn(Gender.MALE);
-        assertEquals(maleResponseEntity, genderController.guessGender("Mateusz Ewa Jan", GuessVariant.MULTIPLE));
+        assertEquals(responseGender, genderController.guessGender("Mateusz Ewa Jan", GuessVariant.MULTIPLE));
 
-        when(this.genderService.checkMultipleName("Mateusz Ewa Maria")).thenReturn(Gender.FEMALE);
-        assertEquals(femaleResponseEntity, genderController.guessGender("Mateusz Ewa Maria", GuessVariant.MULTIPLE));
-
-        when(this.genderService.checkMultipleName("")).thenReturn(Gender.INCONCLUSIVE);
-        assertEquals(inconclusiveResponseEntity, genderController.guessGender("", GuessVariant.MULTIPLE));
-
-        when(this.genderService.checkMultipleName(null)).thenReturn(Gender.INCONCLUSIVE);
-        assertEquals(inconclusiveResponseEntity, genderController.guessGender(null, GuessVariant.MULTIPLE));
-
-        verify(this.genderService, times(3)).checkSingleName(anyString());
-        verify(this.genderService, times(3)).checkMultipleName(anyString());
+        verify(this.genderService, times(1)).checkSingleName(anyString());
+        verify(this.genderService, times(1)).checkMultipleName(anyString());
     }
 
     Pageable paging;
-    List<String> tokens;
+    List<Person> persons;
+    Page<Person> pagePerson;
+    EntityModel<Page<Person>> personEntityModel;
+    ResponseEntity<EntityModel<Page<Person>>> response;
+    int totalElements;
 
-//    @Test
-//    void getTokens() {
-//        paging = PageRequest.of(0, 4);
-//        tokens = Arrays.asList("Adam", "Krzysztof", "Zenon", "Marcin");
-//        when(this.genderService.getTokens(Gender.MALE, paging)).thenReturn(tokens);
-//        assertEquals(tokens, genderService.getTokens(Gender.MALE, paging));
-//
-//        paging = PageRequest.of(2, 10);
-//        tokens = Arrays.asList("Maria", "Natalia", "Zofia", "Jadwiga", "Teresa", "Ludmiła", "Mariola", "Anna", "Anka", "Magda");
-//        when(this.genderService.getTokens(Gender.FEMALE, paging)).thenReturn(tokens);
-//        assertEquals(tokens, genderService.getTokens(Gender.FEMALE, paging));
-//
-//        verify(this.genderService, times(2)).getTokens(any(), any());
-//    }
+    @Test
+    void getTokens() {
+        paging = PageRequest.of(0, 4);
+        totalElements = 100;
+        persons = Arrays.asList(
+                new Person("Adam"), new Person("Krzysztof"), new Person("Zenon"), new Person("Marcin"));
+        pagePerson = new PageImpl<>(persons, paging, totalElements);
+        link = linkTo(methodOn(GenderController.class)
+                .getTokens(Gender.MALE, paging.getPageNumber(), paging.getPageSize())).withSelfRel();
+        personEntityModel = EntityModel.of(pagePerson, link);
+        response = new ResponseEntity<>(personEntityModel, HttpStatus.OK);
+
+        when(this.genderService.getTokens(Gender.MALE, paging)).thenReturn(pagePerson);
+        assertEquals(response, genderController.getTokens(Gender.MALE, 0, 4));
+
+        assertEquals(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR),
+                genderController.getTokens(Gender.MALE, -5, 4));
+
+        verify(this.genderService, times(1)).getTokens(any(), any());
+    }
 }
