@@ -7,6 +7,8 @@ import com.example.genderguesser.services.FlatFileService;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +55,7 @@ public class FlatFileServiceImpl implements FlatFileService {
     }
 
     @Override
-    public List<String> getGenderTokens(Gender gender, Pageable paging) {
+    public Page<Person> getGenderTokens(Gender gender, Pageable paging) {
         FlatFileItemReader<Person> fileReader = flatFileConnector.loadFlatFile(gender);
 
         fileReader.open(new ExecutionContext());
@@ -72,11 +74,23 @@ public class FlatFileServiceImpl implements FlatFileService {
                 e.printStackTrace();
             }
         }
-        fileReader.close();
-        List<String> tokens = new ArrayList<>();
-        for (Person person : persons) {
-            tokens.add(person.getName());
+        Person lastRead;
+        int totalElements = 0;
+        while (true) {
+            try {
+                lastRead = fileReader.read();
+                if (lastRead == null) {
+                    fileReader.close();
+                    break;
+                }
+                totalElements++;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return tokens;
+        totalElements += persons.size();
+        fileReader.close();
+
+        return new PageImpl<>(persons, paging, totalElements);
     }
 }

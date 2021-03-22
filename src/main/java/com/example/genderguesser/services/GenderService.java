@@ -1,6 +1,8 @@
 package com.example.genderguesser.services;
 
 import com.example.genderguesser.models.Gender;
+import com.example.genderguesser.models.Person;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -11,5 +13,5 @@ public interface GenderService {
 
     Gender checkMultipleName(String name);
 
-    List<String> getTokens(Gender gender, Pageable paging);
+    Page<Person> getTokens(Gender gender, Pageable paging);
 }

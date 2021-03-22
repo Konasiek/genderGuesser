@@ -3,8 +3,10 @@ package com.example.genderguesser.controllers;
 import com.example.genderguesser.models.Gender;
 import com.example.genderguesser.models.GenderResponse;
 import com.example.genderguesser.models.GuessVariant;
+import com.example.genderguesser.models.Person;
 import com.example.genderguesser.services.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -55,14 +57,14 @@ public class GenderController {
     }
 
     @GetMapping("/get-tokens")
-    public ResponseEntity<List<String>> getTokens(
+    public ResponseEntity<Page<Person>> getTokens(
             @RequestParam Gender gender,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
 
         try {
             Pageable paging = PageRequest.of(page, size);
-            List<String> response;
+            Page<Person> response;
 
             if (gender.equals(Gender.MALE) || gender.equals(Gender.FEMALE)) {
                 response = genderService.getTokens(gender, paging);

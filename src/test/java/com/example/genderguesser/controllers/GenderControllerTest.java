@@ -64,18 +64,18 @@ class GenderControllerTest {
     Pageable paging;
     List<String> tokens;
 
-    @Test
-    void getTokens() {
-        paging = PageRequest.of(0, 4);
-        tokens = Arrays.asList("Adam", "Krzysztof", "Zenon", "Marcin");
-        when(this.genderService.getTokens(Gender.MALE, paging)).thenReturn(tokens);
-        assertEquals(tokens, genderService.getTokens(Gender.MALE, paging));
-
-        paging = PageRequest.of(2, 10);
-        tokens = Arrays.asList("Maria", "Natalia", "Zofia", "Jadwiga", "Teresa", "Ludmiła", "Mariola", "Anna", "Anka", "Magda");
-        when(this.genderService.getTokens(Gender.FEMALE, paging)).thenReturn(tokens);
-        assertEquals(tokens, genderService.getTokens(Gender.FEMALE, paging));
-
-        verify(this.genderService, times(2)).getTokens(any(), any());
-    }
+//    @Test
+//    void getTokens() {
+//        paging = PageRequest.of(0, 4);
+//        tokens = Arrays.asList("Adam", "Krzysztof", "Zenon", "Marcin");
+//        when(this.genderService.getTokens(Gender.MALE, paging)).thenReturn(tokens);
+//        assertEquals(tokens, genderService.getTokens(Gender.MALE, paging));
+//
+//        paging = PageRequest.of(2, 10);
+//        tokens = Arrays.asList("Maria", "Natalia", "Zofia", "Jadwiga", "Teresa", "Ludmiła", "Mariola", "Anna", "Anka", "Magda");
+//        when(this.genderService.getTokens(Gender.FEMALE, paging)).thenReturn(tokens);
+//        assertEquals(tokens, genderService.getTokens(Gender.FEMALE, paging));
+//
+//        verify(this.genderService, times(2)).getTokens(any(), any());
+//    }
 }

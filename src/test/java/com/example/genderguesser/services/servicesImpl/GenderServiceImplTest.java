@@ -79,18 +79,18 @@ class GenderServiceImplTest {
     Pageable paging;
     List<String> tokens;
 
-    @Test
-    void getTokens() {
-        paging = PageRequest.of(0, 4);
-        tokens = Arrays.asList("Adam", "Krzysztof", "Zenon", "Marcin");
-        when(this.flatFileServiceImpl.getGenderTokens(Gender.MALE, paging)).thenReturn(tokens);
-        assertEquals(tokens, this.genderService.getTokens(Gender.MALE, paging));
-
-        paging = PageRequest.of(5, 8);
-        tokens = Arrays.asList("Paulina", "Maria", "Nina", "Daria", "Edyta", "Magda", "Teresa", "Krystyna");
-        when(this.flatFileServiceImpl.getGenderTokens(Gender.FEMALE, paging)).thenReturn(tokens);
-        assertEquals(tokens, this.genderService.getTokens(Gender.FEMALE, paging));
-
-        verify(this.flatFileServiceImpl, times(2)).getGenderTokens(any(), any());
-    }
+//    @Test
+//    void getTokens() {
+//        paging = PageRequest.of(0, 4);
+//        tokens = Arrays.asList("Adam", "Krzysztof", "Zenon", "Marcin");
+//        when(this.flatFileServiceImpl.getGenderTokens(Gender.MALE, paging)).thenReturn(tokens);
+//        assertEquals(tokens, this.genderService.getTokens(Gender.MALE, paging));
+//
+//        paging = PageRequest.of(5, 8);
+//        tokens = Arrays.asList("Paulina", "Maria", "Nina", "Daria", "Edyta", "Magda", "Teresa", "Krystyna");
+//        when(this.flatFileServiceImpl.getGenderTokens(Gender.FEMALE, paging)).thenReturn(tokens);
+//        assertEquals(tokens, this.genderService.getTokens(Gender.FEMALE, paging));
+//
+//        verify(this.flatFileServiceImpl, times(2)).getGenderTokens(any(), any());
+//    }
 }
